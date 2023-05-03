@@ -4,6 +4,8 @@ import { Respond, Bindings, Variables } from '../utils/types.ts';
 
 const indexRouter = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
+
+//! Get all todo route
 indexRouter.get("/", async (c) => {
     try {
         const todos = await getAllTodos();
@@ -22,6 +24,7 @@ indexRouter.get("/", async (c) => {
     }
 });
 
+//! Add new todo route
 indexRouter.post("/", async (c) => {
     try {
         const body = await c.req.json();
@@ -61,6 +64,7 @@ indexRouter.post("/", async (c) => {
     }
 })
 
+//! Get single todo route
 indexRouter.get("/:id", async (c) => {
     try {
         const id = await c.req.param("id") ?? ""
@@ -89,6 +93,7 @@ indexRouter.get("/:id", async (c) => {
     }
 })
 
+//! Update single todo route
 indexRouter.put("/:id", async (c) => {
     try {
         const id = await c.req.param("id") ?? ""
