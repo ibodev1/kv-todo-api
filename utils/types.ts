@@ -5,3 +5,18 @@ export interface Todo {
     createdAt: number;
     updatedAt: number;
 }
+
+export interface Respond {
+    status: "success" | "error",
+    data?: any | null;
+    message?: string | null;
+    responseTime: number;
+}
+
+export type Bindings = {
+    PORT: string;
+}
+
+export type Variables = {
+    port: number;
+}
