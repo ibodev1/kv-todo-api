@@ -15,6 +15,7 @@ const insertTodo = async (subjectId: string, title: string, isDone = false) => {
             id: nanoid(),
             title,
             isDone,
+            subjectId,
             createdAt: Date.now(),
             updatedAt: Date.now()
         }

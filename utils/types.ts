@@ -9,13 +9,14 @@ export interface Todo {
     id: string;
     title: string;
     isDone: boolean;
+    subjectId: string;
     createdAt: number;
     updatedAt: number;
 }
 
 export interface Respond {
     status: "success" | "error",
-    data?: any | null;
+    data?: Todo | Subject | Todo[] | Subject[] | null;
     message?: string | null;
     responseTime: number;
 }
