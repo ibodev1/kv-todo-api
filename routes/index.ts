@@ -1,5 +1,5 @@
 import { Hono } from "https://deno.land/x/hono@v3.1.8/mod.ts"
-import { getAllTodos, getTodo, insertTodo, updateTodo } from "../utils/db.ts";
+import { deleteTodo, getAllTodos, getTodo, insertTodo, updateTodo } from "../utils/db.ts";
 import { Respond, Bindings, Variables } from '../utils/types.ts';
 
 const indexRouter = new Hono<{ Bindings: Bindings; Variables: Variables }>()
@@ -121,4 +121,33 @@ indexRouter.put("/:id", async (c) => {
     }
 })
 
+//! Delete todo route
+indexRouter.delete("/", async (c) => {
+    try {
+        const { id } = await c.req.json()
+        if (!id) throw new Error("id is required!");
+        const isDeleted = await deleteTodo(id);
+        if (isDeleted) {
+            return c.json<Respond>({
+                status: "success",
+                message: "todo is deleted!",
+                responseTime: Date.now()
+            })
+        } else {
+            c.status(400)
+            return c.json<Respond>({
+                status: "error",
+                message: "todo is not deleted!",
+                responseTime: Date.now()
+            })
+        }
+    } catch (error) {
+        c.status(500)
+        return c.json<Respond>({
+            status: "error",
+            message: error.toString(),
+            responseTime: Date.now()
+        })
+    }
+})
 export default indexRouter;
