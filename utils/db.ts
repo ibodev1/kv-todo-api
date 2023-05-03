@@ -7,7 +7,7 @@ import { Todo } from './types.ts';
 
 const kv = await Deno.openKv();
 
-const getTodos = async () => {
+const getAllTodos = async () => {
     try {
         const todos: Todo[] = [];
         for await (const iter of await kv.list<Todo>({ prefix: ["todos"] })) {
@@ -19,6 +19,8 @@ const getTodos = async () => {
     }
 }
 
+
+
 export {
-    getTodos
+    getAllTodos
 }
