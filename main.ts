@@ -40,8 +40,10 @@ app.route("/subject", subjectRouter)
 
 //! Serve Func
 serve(app.fetch, {
+  hostname: "0.0.0.0",
   port: Number(Deno.env.get("PORT") ?? 5500),
-  onListen: ({ hostname: _hostname, port }) => {
-    console.info("Listening on http://localhost:" + port);
+  onListen: ({ hostname, port }) => {
+    const host = "0.0.0.0" !== hostname ? hostname : "localhost";
+    console.info(`Listening on http://${host}:${port}`);
   }
 })
