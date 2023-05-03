@@ -39,7 +39,8 @@ const getAllTodos = async () => {
 
 const getTodo = async (id: string) => {
     try {
-        return await kv.get<Todo>(["todos", id])
+        const res = await kv.get<Todo>(["todos", id]);
+        return res.value;
     } catch (error) {
         throw error;
     }

@@ -1,5 +1,5 @@
 import { Hono } from "https://deno.land/x/hono@v3.1.8/mod.ts"
-import { getAllTodos, insertTodo } from "../utils/db.ts";
+import { getAllTodos, getTodo, insertTodo } from "../utils/db.ts";
 import { Respond, Bindings, Variables } from '../utils/types.ts';
 
 const indexRouter = new Hono<{ Bindings: Bindings; Variables: Variables }>()
@@ -60,5 +60,34 @@ indexRouter.post("/", async (c) => {
         })
     }
 })
+
+indexRouter.get("/:id", async (c) => {
+    try {
+        const id = await c.req.param("id") ?? "";
+        const todo = await getTodo(id);
+        if (todo) {
+            return c.json<Respond>({
+                status: "success",
+                data: todo,
+                responseTime: Date.now()
+            })
+        } else {
+            c.status(400)
+            return c.json<Respond>({
+                status: "error",
+                message: "Todo not found!",
+                responseTime: Date.now()
+            })
+        }
+    } catch (error) {
+        c.status(500)
+        return c.json<Respond>({
+            status: "error",
+            message: error.toString(),
+            responseTime: Date.now()
+        })
+    }
+})
+
 
 export default indexRouter;
