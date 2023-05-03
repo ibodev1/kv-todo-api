@@ -19,10 +19,14 @@ const getLastTodosWithSubject = async () => {
     return data;
 }
 
-type sortBy = "createdAt" | "updatedAt";
+type sortBy = "createdAt" | "updatedAt"
+
+const sortKeys: sortBy[] = ["createdAt","updatedAt"]
 
 indexRouter.get("/", async (c) => {
-    const sortBy: sortBy = await c.req.query("sort") as sortBy ?? "createdAt";
+    let sortBy = sortKeys[0];
+    const sortQuery = await c.req.query("sort") as sortBy ?? sortKeys[0];
+    if(sortKeys.includes(sortQuery)) sortBy = sortQuery;
     const data = await getLastTodosWithSubject();
     data.sort((a, b) => new Date(a[sortBy]).getTime() - new Date(b[sortBy]).getTime())
     return c.json(data.reverse())
