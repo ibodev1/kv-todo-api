@@ -1,3 +1,4 @@
+import "https://deno.land/std@0.185.0/dotenv/load.ts"
 import { serve } from "https://deno.land/std@0.185.0/http/server.ts"
 import { Hono, Context } from "https://deno.land/x/hono@v3.1.8/mod.ts"
 import { cors, prettyJSON } from "https://deno.land/x/hono@v3.1.8/middleware.ts"
