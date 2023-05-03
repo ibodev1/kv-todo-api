@@ -1,5 +1,5 @@
 import { Hono } from "https://deno.land/x/hono@v3.1.8/mod.ts"
-import { getAllTodos, getTodo, insertTodo } from "../utils/db.ts";
+import { getAllTodos, getTodo, insertTodo, updateTodo } from "../utils/db.ts";
 import { Respond, Bindings, Variables } from '../utils/types.ts';
 
 const indexRouter = new Hono<{ Bindings: Bindings; Variables: Variables }>()
@@ -63,8 +63,8 @@ indexRouter.post("/", async (c) => {
 
 indexRouter.get("/:id", async (c) => {
     try {
-        const id = await c.req.param("id") ?? "";
-        const todo = await getTodo(id);
+        const id = await c.req.param("id") ?? ""
+        const todo = await getTodo(id)
         if (todo) {
             return c.json<Respond>({
                 status: "success",
@@ -89,5 +89,31 @@ indexRouter.get("/:id", async (c) => {
     }
 })
 
+indexRouter.put("/:id", async (c) => {
+    try {
+        const id = await c.req.param("id") ?? ""
+        const body = await c.req.json()
+        if (!body.title) throw new Error("Title is requires")
+
+        const isUpdated = await updateTodo(id, {
+            title: body.title,
+            isDone: body?.isDone ?? false
+        });
+        if (isUpdated) {
+            return c.json<Respond>({
+                status: "success",
+                message: id + " todo is updated!",
+                responseTime: Date.now()
+            })
+        }
+    } catch (error) {
+        c.status(500)
+        return c.json<Respond>({
+            status: "error",
+            message: error.toString(),
+            responseTime: Date.now()
+        })
+    }
+})
 
 export default indexRouter;

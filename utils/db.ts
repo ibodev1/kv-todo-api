@@ -46,8 +46,29 @@ const getTodo = async (id: string) => {
     }
 }
 
+const updateTodo = async (id: string, { title, isDone }: { title: string, isDone: boolean }) => {
+    try {
+        const todoRes = await kv.get<Todo>(["todos", id])
+        if (!todoRes.value) throw new Error("Todo is not found!");
+        const todo: Todo = {
+            ...todoRes.value,
+            title,
+            isDone,
+            updatedAt: Date.now()
+        }
+        const updateRes = await kv.atomic()
+            .check(todoRes)
+            .set(["todos", id], todo)
+            .commit();
+        return updateRes !== null;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export {
     getAllTodos,
     getTodo,
-    insertTodo
+    insertTodo,
+    updateTodo
 }

@@ -37,7 +37,7 @@ app.route("/", indexRouter)
 //! Serve Func
 serve(app.fetch, {
   port: Number(Deno.env.get("PORT") ?? 5500),
-  onListen: ({ hostname, port }) => {
+  onListen: ({ hostname: _hostname, port }) => {
     console.info("Listening on http://localhost:" + port);
   }
 })
