@@ -2,20 +2,22 @@ import { serve } from "https://deno.land/std@0.185.0/http/server.ts"
 import { Hono, Context } from "https://deno.land/x/hono@v3.1.8/mod.ts"
 import { cors, prettyJSON } from "https://deno.land/x/hono@v3.1.8/middleware.ts"
 import { HTTPException } from "https://deno.land/x/hono@v3.1.8/http-exception.ts"
+import { Respond, Bindings, Variables } from './utils/types.ts'
 import indexRouter from './routes/index.ts'
-import { Respond ,Bindings,Variables} from './utils/types.ts';
+import todoRouter from './routes/todo.ts'
+import subjectRouter from './routes/subject.ts'
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
 //! Middleware
-app.use("*", cors());
-app.use("*", prettyJSON());
+app.use("*", cors())
+app.use("*", prettyJSON())
 
 //! PORT
 app.use("*", async (c, next) => {
-  const port = Number(c.env.PORT ?? 5500);
-  c.set("port", port);
-  return await next();
+  const port = Number(c.env.PORT ?? 5500)
+  c.set("port", port)
+  return await next()
 })
 
 //! Error Handle
@@ -33,6 +35,8 @@ app.onError((err: Error, c: Context) => {
 
 //! Routes
 app.route("/", indexRouter)
+app.route("/todo", todoRouter)
+app.route("/subject", subjectRouter)
 
 //! Serve Func
 serve(app.fetch, {

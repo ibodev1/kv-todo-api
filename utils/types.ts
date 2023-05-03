@@ -1,3 +1,10 @@
+export interface Subject {
+    id: string;
+    title: string;
+    createdAt: number;
+    updatedAt: number;
+}
+
 export interface Todo {
     id: string;
     title: string;

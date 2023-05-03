@@ -4,12 +4,12 @@
  * 
  */
 import { nanoid } from "https://deno.land/x/nanoid@v3.0.0/nanoid.ts";
-import { Todo } from './types.ts';
+import { Todo } from '../types.ts';
 
 
 const kv = await Deno.openKv();
 
-const insertTodo = async (title: string, isDone = false) => {
+const insertTodo = async (subjectId: string, title: string, isDone = false) => {
     try {
         const todo: Todo = {
             id: nanoid(),
@@ -18,17 +18,17 @@ const insertTodo = async (title: string, isDone = false) => {
             createdAt: Date.now(),
             updatedAt: Date.now()
         }
-        await kv.set(["todos", todo.id], todo);
+        await kv.set(["todos", subjectId, todo.id], todo);
         return todo.id;
     } catch (error) {
         throw error;
     }
 }
 
-const getAllTodos = async () => {
+const getAllTodos = async (subjectId: string) => {
     try {
         const todos: Todo[] = [];
-        for await (const iter of await kv.list<Todo>({ prefix: ["todos"] })) {
+        for await (const iter of await kv.list<Todo>({ prefix: ["todos", subjectId] })) {
             todos.push(iter.value)
         }
         return todos;
@@ -37,18 +37,19 @@ const getAllTodos = async () => {
     }
 }
 
-const getTodo = async (id: string) => {
+const getTodo = async (subjectId: string, id: string) => {
     try {
-        const res = await kv.get<Todo>(["todos", id]);
+        const res = await kv.get<Todo>(["todos", subjectId, id]);
         return res.value;
     } catch (error) {
         throw error;
     }
 }
 
-const updateTodo = async (id: string, { title, isDone }: { title: string, isDone: boolean }) => {
+const updateTodo = async (subjectId: string, id: string, { title, isDone }: { title: string, isDone: boolean }) => {
     try {
-        const todoRes = await kv.get<Todo>(["todos", id])
+        const key = ["todos", subjectId, id];
+        const todoRes = await kv.get<Todo>(key)
         if (!todoRes.value) throw new Error("Todo is not found!");
         const todo: Todo = {
             ...todoRes.value,
@@ -58,7 +59,7 @@ const updateTodo = async (id: string, { title, isDone }: { title: string, isDone
         }
         const updateRes = await kv.atomic()
             .check(todoRes)
-            .set(["todos", id], todo)
+            .set(key, todo)
             .commit();
         return updateRes !== null;
     } catch (error) {
@@ -67,13 +68,14 @@ const updateTodo = async (id: string, { title, isDone }: { title: string, isDone
 }
 
 
-const deleteTodo = async (id: string) => {
+const deleteTodo = async (subjectId: string, id: string) => {
     try {
-        const todoRes = await kv.get<Todo>(["todos", id])
+        const key = ["todos", subjectId, id];
+        const todoRes = await kv.get<Todo>(key)
         if (!todoRes.value) throw new Error("Todo is not found!");
         const deleteRes = await kv.atomic()
             .check(todoRes)
-            .delete(["todos", id])
+            .delete(key)
             .commit()
         return deleteRes !== null;
     } catch (error) {
