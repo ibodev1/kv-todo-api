@@ -38,6 +38,16 @@ app.onError((err: Error, c: Context) => {
     message: "Internal Server Error",
     responseTime: Date.now()
   })
+});
+
+//! 404 Handle
+app.notFound((c) => {
+  c.status(404);
+  return c.json<Respond>({
+    status: "error",
+    message: "404 Not Found!",
+    responseTime: Date.now()
+  })
 })
 
 //! Routes
