@@ -1,4 +1,3 @@
-import "https://deno.land/std@0.185.0/dotenv/load.ts"
 import { serve } from "https://deno.land/std@0.185.0/http/server.ts"
 import { Hono, Context } from "https://deno.land/x/hono@v3.1.8/mod.ts"
 import { cors, prettyJSON } from "https://deno.land/x/hono@v3.1.8/middleware.ts"
@@ -41,7 +40,6 @@ app.route("/subject", subjectRouter)
 
 //! Serve Func
 serve(app.fetch, {
-  hostname: "0.0.0.0",
   port: Number(Deno.env.get("PORT") ?? 5500),
   onListen: ({ hostname, port }) => {
     const host = "0.0.0.0" !== hostname ? hostname : "localhost";
