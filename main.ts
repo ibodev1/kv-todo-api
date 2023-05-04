@@ -17,7 +17,7 @@ app.use('*', async (c, next) => {
   const start = Date.now()
   await next()
   const end = Date.now()
-  c.res.headers.set('X-Response-Time', `${start - end}`)
+  c.res.headers.set('X-Response-Time', `${end - start}ms`)
 });
 
 //! PORT
@@ -26,6 +26,11 @@ app.use("*", async (c, next) => {
   c.set("port", port)
   return await next()
 })
+
+//! Routes
+app.route("/", indexRouter)
+app.route("/todo", todoRouter)
+app.route("/subject", subjectRouter)
 
 //! Error Handle
 app.onError((err: Error, c: Context) => {
@@ -38,7 +43,7 @@ app.onError((err: Error, c: Context) => {
     message: "Internal Server Error",
     responseTime: Date.now()
   })
-});
+})
 
 //! 404 Handle
 app.notFound((c) => {
@@ -49,11 +54,6 @@ app.notFound((c) => {
     responseTime: Date.now()
   })
 })
-
-//! Routes
-app.route("/", indexRouter)
-app.route("/todo", todoRouter)
-app.route("/subject", subjectRouter)
 
 //! Serve Func
 serve(app.fetch, {
