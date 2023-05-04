@@ -1,10 +1,10 @@
-import { Hono } from "https://deno.land/x/hono@v3.1.8/mod.ts"
-import { getAllSubjects, deleteSubject, getSubject, insertSubject, updateSubject } from "../utils/db/subject.ts";
-import { Respond, Bindings, Variables } from '../utils/types.ts';
+import { Hono } from "hono"
+import { getAllSubjects, deleteSubject, getSubject, insertSubject, updateSubject } from "../utils/db/subject.ts"
+import { Respond, Bindings, Variables } from '../utils/types.ts'
 
 const subjectRouter = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
-//! Get all subject route
+//! Get all subject
 subjectRouter.get("/", async (c) => {
     try {
         const subjects = await getAllSubjects();
@@ -23,7 +23,7 @@ subjectRouter.get("/", async (c) => {
     }
 });
 
-//! Add new subject route
+//! Add new subject
 subjectRouter.post("/", async (c) => {
     try {
         const body = await c.req.json();
@@ -54,7 +54,7 @@ subjectRouter.post("/", async (c) => {
     }
 })
 
-//! Get single subject route
+//! Get single subject
 subjectRouter.get("/:id", async (c) => {
     try {
         const id = await c.req.param("id") ?? "";
@@ -83,7 +83,7 @@ subjectRouter.get("/:id", async (c) => {
     }
 })
 
-//! Update single subject route
+//! Update single subject
 subjectRouter.put("/:id", async (c) => {
     try {
         const id = await c.req.param("id") ?? ""
@@ -110,7 +110,7 @@ subjectRouter.put("/:id", async (c) => {
     }
 })
 
-//! Delete subject route
+//! Delete subject
 subjectRouter.delete("/", async (c) => {
     try {
         const { id } = await c.req.json()

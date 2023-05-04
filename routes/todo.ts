@@ -1,10 +1,10 @@
-import { Hono } from "https://deno.land/x/hono@v3.1.8/mod.ts"
-import { getAllTodos, deleteTodo, getTodo, insertTodo, updateTodo } from "../utils/db/todo.ts";
-import { Respond, Bindings, Variables } from '../utils/types.ts';
+import { Hono } from "hono"
+import { getAllTodos, deleteTodo, getTodo, insertTodo, updateTodo } from "../utils/db/todo.ts"
+import { Respond, Bindings, Variables } from '../utils/types.ts'
 
 const todoRouter = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
-//! Get all todo route
+//! Get all todo
 todoRouter.get("/:subjectId", async (c) => {
     try {
         const subjectId = await c.req.param("subjectId") ?? "";
@@ -24,7 +24,7 @@ todoRouter.get("/:subjectId", async (c) => {
     }
 });
 
-//! Add new todo route
+//! Add new todo
 todoRouter.post("/:subjectId", async (c) => {
     try {
         const subjectId = await c.req.param("subjectId") ?? "";
@@ -65,7 +65,7 @@ todoRouter.post("/:subjectId", async (c) => {
     }
 })
 
-//! Get single todo route
+//! Get single todo
 todoRouter.get("/:subjectId/:id", async (c) => {
     try {
         const subjectId = await c.req.param("subjectId") ?? "";
@@ -95,7 +95,7 @@ todoRouter.get("/:subjectId/:id", async (c) => {
     }
 })
 
-//! Update single todo route
+//! Update single todo
 todoRouter.put("/:subjectId/:id", async (c) => {
     try {
         const subjectId = await c.req.param("subjectId") ?? "";
@@ -124,7 +124,7 @@ todoRouter.put("/:subjectId/:id", async (c) => {
     }
 })
 
-//! Delete todo route
+//! Delete todo
 todoRouter.delete("/:subjectId", async (c) => {
     try {
         const subjectId = await c.req.param("subjectId") ?? "";

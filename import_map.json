@@ -1,0 +1,8 @@
+{
+  "imports": {
+    "$std/": "https://deno.land/std@0.185.0/",
+    "hono": "https://deno.land/x/hono@v3.1.8/mod.ts",
+    "hono/": "https://deno.land/x/hono@v3.1.8/",
+    "nanoid": "https://deno.land/x/nanoid@v3.0.0/nanoid.ts"
+  }
+}

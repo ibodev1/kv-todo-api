@@ -1,4 +1,4 @@
-import { Hono } from "https://deno.land/x/hono@v3.1.8/mod.ts"
+import { Hono } from "hono"
 import { Bindings, Variables } from '../utils/types.ts'
 import { getLastTodos } from '../utils/lib.ts';
 

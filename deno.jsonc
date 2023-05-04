@@ -2,5 +2,6 @@
   "lock": false,
   "tasks": {
     "dev": "deno run --unstable --allow-net --allow-env --watch main.ts"
-  }
+  },
+  "importMap": "./import_map.json"
 }

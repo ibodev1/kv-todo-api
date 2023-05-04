@@ -1,5 +1,5 @@
-import { assertEquals } from "https://deno.land/std@0.184.0/testing/asserts.ts";
-import { Hono } from "https://deno.land/x/hono@v3.1.8/mod.ts"
+import { assertEquals } from "https://deno.land/std@0.184.0/testing/asserts.ts"
+import { Hono } from "hono"
 
 Deno.test('Server Test', async () => {
   const app = new Hono()

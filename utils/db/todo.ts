@@ -3,9 +3,8 @@
  * KV Database Todo App API
  * 
  */
-import { nanoid } from "https://deno.land/x/nanoid@v3.0.0/nanoid.ts";
+import { nanoid } from "nanoid";
 import { Todo } from '../types.ts';
-
 
 const kv = await Deno.openKv();
 

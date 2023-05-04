@@ -1,7 +1,7 @@
-import { serve } from "https://deno.land/std@0.185.0/http/server.ts"
-import { Hono, Context } from "https://deno.land/x/hono@v3.1.8/mod.ts"
-import { cors, prettyJSON } from "https://deno.land/x/hono@v3.1.8/middleware.ts"
-import { HTTPException } from "https://deno.land/x/hono@v3.1.8/http-exception.ts"
+import { serve } from "$std/http/server.ts"
+import { Hono, Context } from "hono"
+import { cors, prettyJSON } from "hono/middleware.ts"
+import { HTTPException } from "hono/http-exception.ts"
 import { Respond, Bindings, Variables } from './utils/types.ts'
 import indexRouter from './routes/index.ts'
 import todoRouter from './routes/todo.ts'
