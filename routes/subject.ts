@@ -4,7 +4,6 @@ import { Respond, Bindings, Variables } from '../utils/types.ts';
 
 const subjectRouter = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
-
 //! Get all subject route
 subjectRouter.get("/", async (c) => {
     try {

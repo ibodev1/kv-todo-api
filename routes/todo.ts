@@ -4,7 +4,6 @@ import { Respond, Bindings, Variables } from '../utils/types.ts';
 
 const todoRouter = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
-
 //! Get all todo route
 todoRouter.get("/:subjectId", async (c) => {
     try {
