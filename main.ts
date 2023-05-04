@@ -16,14 +16,13 @@ app.use('*', async (c, next) => {
   const start = Date.now()
   await next()
   const end = Date.now()
-  c.res.headers.set('X-Response-Time', `${end - start}`)
+  c.res.headers.set('X-Response-Time', `${start - end}`)
 });
 
 //! PORT
 app.use("*", async (c, next) => {
   const port = Number(c.env.PORT ?? 5500)
   c.set("port", port)
-  c.res.headers.set("X-Port", port.toString());
   return await next()
 })
 
