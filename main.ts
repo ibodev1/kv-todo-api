@@ -6,6 +6,7 @@ import { Respond, Bindings, Variables } from './utils/types.ts'
 import indexRouter from './routes/index.ts'
 import todoRouter from './routes/todo.ts'
 import subjectRouter from './routes/subject.ts'
+import { DEFAULT_PORT, SERVER_ERROR_STATUS_CODE } from './utils/constants.ts'
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
@@ -21,7 +22,7 @@ app.use('*', async (c, next) => {
 
 //! PORT
 app.use("*", async (c, next) => {
-  const port = Number(c.env.PORT ?? 5500)
+  const port = Number(c.env.PORT ?? DEFAULT_PORT)
   c.set("port", port)
   return await next()
 })
@@ -31,7 +32,7 @@ app.onError((err: Error, c: Context) => {
   if (err instanceof HTTPException) {
     return err.getResponse()
   }
-  c.status(500);
+  c.status(SERVER_ERROR_STATUS_CODE);
   return c.json<Respond>({
     status: "error",
     message: "Internal Server Error",
@@ -46,7 +47,7 @@ app.route("/subject", subjectRouter)
 
 //! Serve Func
 serve(app.fetch, {
-  port: Number(Deno.env.get("PORT") ?? 5500),
+  port: Number(Deno.env.get("PORT") ?? DEFAULT_PORT),
   onListen: ({ hostname, port }) => {
     const host = "0.0.0.0" !== hostname ? hostname : "localhost";
     console.info(`Listening on http://${host}:${port}`);

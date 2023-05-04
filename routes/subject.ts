@@ -1,6 +1,7 @@
 import { Hono } from "hono"
 import { getAllSubjects, deleteSubject, getSubject, insertSubject, updateSubject } from "../utils/db/subject.ts"
 import { Respond, Bindings, Variables } from '../utils/types.ts'
+import { BAD_REQUEST_STATUS_CODE, SERVER_ERROR_STATUS_CODE, DEFAULT_PARAM } from '../utils/constants.ts'
 
 const subjectRouter = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
@@ -14,7 +15,7 @@ subjectRouter.get("/", async (c) => {
             responseTime: Date.now()
         });
     } catch (error) {
-        c.status(500)
+        c.status(SERVER_ERROR_STATUS_CODE)
         return c.json<Respond>({
             status: "error",
             message: error.toString(),
@@ -28,7 +29,7 @@ subjectRouter.post("/", async (c) => {
     try {
         const body = await c.req.json();
         if (!body?.title) {
-            c.status(400);
+            c.status(BAD_REQUEST_STATUS_CODE);
             return c.json<Respond>({
                 status: "error",
                 message: "title is required!",
@@ -45,7 +46,7 @@ subjectRouter.post("/", async (c) => {
             })
         }
     } catch (error) {
-        c.status(500)
+        c.status(SERVER_ERROR_STATUS_CODE)
         return c.json<Respond>({
             status: "error",
             message: error.toString(),
@@ -57,7 +58,7 @@ subjectRouter.post("/", async (c) => {
 //! Get single subject
 subjectRouter.get("/:id", async (c) => {
     try {
-        const id = await c.req.param("id") ?? "";
+        const id = await c.req.param("id") ?? DEFAULT_PARAM;
         const subject = await getSubject(id)
         if (subject) {
             return c.json<Respond>({
@@ -66,7 +67,7 @@ subjectRouter.get("/:id", async (c) => {
                 responseTime: Date.now()
             })
         } else {
-            c.status(400)
+            c.status(BAD_REQUEST_STATUS_CODE)
             return c.json<Respond>({
                 status: "error",
                 message: "Subject not found!",
@@ -74,7 +75,7 @@ subjectRouter.get("/:id", async (c) => {
             })
         }
     } catch (error) {
-        c.status(500)
+        c.status(SERVER_ERROR_STATUS_CODE)
         return c.json<Respond>({
             status: "error",
             message: error.toString(),
@@ -86,7 +87,7 @@ subjectRouter.get("/:id", async (c) => {
 //! Update single subject
 subjectRouter.put("/:id", async (c) => {
     try {
-        const id = await c.req.param("id") ?? ""
+        const id = await c.req.param("id") ?? DEFAULT_PARAM
         const body = await c.req.json()
         if (!body.title) throw new Error("Title is requires")
 
@@ -101,7 +102,7 @@ subjectRouter.put("/:id", async (c) => {
             })
         }
     } catch (error) {
-        c.status(500)
+        c.status(SERVER_ERROR_STATUS_CODE)
         return c.json<Respond>({
             status: "error",
             message: error.toString(),
@@ -123,7 +124,7 @@ subjectRouter.delete("/", async (c) => {
                 responseTime: Date.now()
             })
         } else {
-            c.status(400)
+            c.status(BAD_REQUEST_STATUS_CODE)
             return c.json<Respond>({
                 status: "error",
                 message: "subject is not deleted!",
@@ -131,7 +132,7 @@ subjectRouter.delete("/", async (c) => {
             })
         }
     } catch (error) {
-        c.status(500)
+        c.status(SERVER_ERROR_STATUS_CODE)
         return c.json<Respond>({
             status: "error",
             message: error.toString(),
