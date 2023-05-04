@@ -2,7 +2,8 @@
   "lock": false,
   "tasks": {
     "dev": "deno run --unstable --allow-net --allow-env --watch main.ts",
-    "test": "deno test -A --unstable"
+    "test": "deno test -A --unstable",
+    "bench": "deno bench -A --unstable"
   },
   "importMap": "./import_map.json"
 }
