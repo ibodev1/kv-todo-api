@@ -3,11 +3,10 @@
  * KV Database Todo App API
  * 
  */
-import { nanoid } from "nanoid";
-import { Subject } from '../types.ts';
-import { deleteTodo, getAllTodos } from "./todo.ts";
-
-const kv = await Deno.openKv();
+import { nanoid } from "nanoid"
+import { Subject } from '../types.ts'
+import { deleteTodo, getAllTodos } from "./todo.ts"
+import { del, get, insert, list, update } from "./generic.ts"
 
 const insertSubject = async (title: string) => {
     try {
@@ -17,8 +16,8 @@ const insertSubject = async (title: string) => {
             createdAt: Date.now(),
             updatedAt: Date.now()
         }
-        await kv.set(["subjects", subject.id], subject);
-        return subject.id;
+        await insert(["subjects", subject.id], subject)
+        return subject.id
     } catch (error) {
         throw error;
     }
@@ -26,10 +25,7 @@ const insertSubject = async (title: string) => {
 
 const getAllSubjects = async () => {
     try {
-        const subjects: Subject[] = [];
-        for await (const iter of await kv.list<Subject>({ prefix: ["subjects"] })) {
-            subjects.push(iter.value)
-        }
+        const subjects: Subject[] = await list<Subject>(["subjects"])
         return subjects;
     } catch (error) {
         throw error;
@@ -38,8 +34,7 @@ const getAllSubjects = async () => {
 
 const getSubject = async (id: string) => {
     try {
-        const res = await kv.get<Subject>(["subjects", id]);
-        return res.value;
+        return await get<Subject>(["subjects", id])
     } catch (error) {
         throw error;
     }
@@ -47,45 +42,28 @@ const getSubject = async (id: string) => {
 
 const updateSubject = async (id: string, { title }: { title: string }) => {
     try {
-        const key = ["subjects", id];
-        const subjectRes = await kv.get<Subject>(key)
-        if (!subjectRes.value) throw new Error("Subject is not found!");
-        const subject: Subject = {
-            ...subjectRes.value,
-            title,
-            updatedAt: Date.now()
-        }
-        const updateRes = await kv.atomic()
-            .check(subjectRes)
-            .set(key, subject)
-            .commit();
-        return updateRes !== null;
+        const isUpdated = await update(["subjects", id], { title, updatedAt: Date.now() })
+        return isUpdated
     } catch (error) {
-        throw error;
+        throw error
     }
 }
 
 
 const deleteSubject = async (id: string) => {
     try {
-        const key = ["subjects", id];
-        const subjectRes = await kv.get<Subject>(key)
-        if (!subjectRes.value) throw new Error("Subject is not found!");
-        const deleteRes = await kv.atomic()
-            .check(subjectRes)
-            .delete(key)
-            .commit()
+        const isDeleted = await del(["subjects", id])
 
         // Delete subject todos
-        const subjectTodos = await getAllTodos(id);
+        const subjectTodos = await getAllTodos(id)
         if (subjectTodos && subjectTodos.length > 0) {
             subjectTodos.forEach(async todo => {
-                await deleteTodo(id, todo.id);
+                await deleteTodo(id, todo.id)
             });
         }
-        return deleteRes !== null;
+        return isDeleted
     } catch (error) {
-        throw error;
+        throw error
     }
 }
 
