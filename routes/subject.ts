@@ -41,7 +41,7 @@ subjectRouter.post("/", async (c) => {
         if (subjectId) {
             return c.json<Respond>({
                 status: "success",
-                message: "Subject id : " + subjectId,
+                data: subjectId,
                 responseTime: Date.now()
             })
         }
@@ -97,7 +97,7 @@ subjectRouter.put("/:id", async (c) => {
         if (isUpdated) {
             return c.json<Respond>({
                 status: "success",
-                message: id + " subject is updated!",
+                data: id,
                 responseTime: Date.now()
             })
         }
@@ -120,7 +120,7 @@ subjectRouter.delete("/", async (c) => {
         if (isDeleted) {
             return c.json<Respond>({
                 status: "success",
-                message: "subject is deleted!",
+                data: id,
                 responseTime: Date.now()
             })
         } else {

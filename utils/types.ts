@@ -16,7 +16,7 @@ export interface Todo {
 
 export interface Respond {
     status: "success" | "error",
-    data?: Todo | Subject | Todo[] | Subject[] | null;
+    data?: Todo | Subject | Todo[] | Subject[] | string | null;
     message?: string | null;
     responseTime: number;
 }

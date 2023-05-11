@@ -52,7 +52,7 @@ todoRouter.post("/:subjectId", async (c) => {
         if (todoId) {
             return c.json<Respond>({
                 status: "success",
-                message: "Todo id : " + todoId,
+                data: todoId,
                 responseTime: Date.now()
             })
         }
@@ -111,7 +111,7 @@ todoRouter.put("/:subjectId/:id", async (c) => {
         if (isUpdated) {
             return c.json<Respond>({
                 status: "success",
-                message: id + " todo is updated!",
+                data: id,
                 responseTime: Date.now()
             })
         }
@@ -135,7 +135,7 @@ todoRouter.delete("/:subjectId", async (c) => {
         if (isDeleted) {
             return c.json<Respond>({
                 status: "success",
-                message: "todo is deleted!",
+                data: id,
                 responseTime: Date.now()
             })
         } else {
