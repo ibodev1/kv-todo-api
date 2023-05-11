@@ -14,11 +14,11 @@ export const getLastTodos = async () => {
 
     for await (const sub of subjects) {
         const allTodos = await getAllTodos(sub.id);
-        todos = [...data, ...allTodos];
+        todos = [...todos, ...allTodos];
     }
 
 
-    for (const todo of todos) {
+    for await (const todo of todos) {
         const value: Value = {
             ...todo,
             subject: subjects.find(sub => sub.id === todo.subjectId)
@@ -26,5 +26,5 @@ export const getLastTodos = async () => {
         data = [...data, value]
     }
 
-    return todos;
+    return data;
 }
