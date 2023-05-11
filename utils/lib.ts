@@ -7,7 +7,7 @@ interface Value extends Todo {
 }
 
 export const getLastTodos = async () => {
-    const data: Value[] = []
+    let data: Value[] = []
     let todos: Todo[] = []
     // Get subjects
     const subjects = await getAllSubjects();
@@ -18,13 +18,13 @@ export const getLastTodos = async () => {
     }
 
 
-    for await (const todo of todos) {
+    for (const todo of todos) {
         const value: Value = {
             ...todo,
             subject: subjects.find(sub => sub.id === todo.subjectId)
         }
-        data.push(value)
+        data = [...data, value]
     }
 
-    return data;
+    return todos;
 }
