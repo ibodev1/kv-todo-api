@@ -17,13 +17,14 @@ export const getLastTodos = async () => {
         todos = [...data, ...allTodos];
     }
 
-    todos.forEach((todo) => {
+
+    for await (const todo of todos) {
         const value: Value = {
             ...todo,
             subject: subjects.find(sub => sub.id === todo.subjectId)
         }
         data.push(value)
-    })
+    }
 
     return data;
 }
